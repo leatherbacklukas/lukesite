@@ -1,10 +1,7 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-/*
- * Runtime design tokens: "Clay" light theme, "Balanced" density.
- * Heading color and section bands are still being compared on /styleguide in dev.
- */
+/* Runtime design tokens: "Clay" light theme, "Balanced" density. */
 :root {
   color-scheme: light;
 
@@ -16,11 +13,17 @@
   --accent: #b83a08;
   --accent-bright: #ff4f14;
   --cerulean: #034cbd;
-  --cerulean-wash: #dce6f3;
   --on-cerulean: #eee5d8;
   --teal: #0a6a61;
 
-  --heading-color: var(--ink);
+  --peach: #f3cfb8;
+  --peach-line: #e3b195;
+  --peach-light: #f8e3d5;
+  --peach-light-line: #edc9b2;
+  /* The standard accent drops below 4.5:1 on peach. */
+  --accent-on-band: #a33206;
+
+  --heading-color: var(--cerulean);
 
   --gutter: clamp(1.25rem, 0.8rem + 2vw, 2.5rem);
   --section-gap: clamp(4rem, 2.5rem + 5vw, 7rem);
@@ -44,9 +47,10 @@
   --color-accent: var(--accent);
   --color-accent-bright: var(--accent-bright);
   --color-cerulean: var(--cerulean);
-  --color-cerulean-wash: var(--cerulean-wash);
   --color-on-cerulean: var(--on-cerulean);
   --color-teal: var(--teal);
+  --color-peach: var(--peach);
+  --color-peach-light: var(--peach-light);
 
   --spacing-gutter: var(--gutter);
   --spacing-section: var(--section-gap);
@@ -102,9 +106,31 @@
   }
 }
 
+@utility page-container {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--container-wide);
+  padding-inline: var(--gutter);
+}
+
+/* Full-width section bands. Consecutive bands alternate peach / light peach. */
+@layer components {
+  .band {
+    --accent: var(--accent-on-band);
+    --line: var(--peach-line);
+    background-color: var(--peach);
+    padding-block: calc(var(--section-gap) * 0.6);
+  }
+
+  .band:nth-child(even of .band) {
+    --line: var(--peach-light-line);
+    background-color: var(--peach-light);
+  }
+}
+
 @utility prose {
   --tw-prose-body: var(--ink);
-  --tw-prose-headings: var(--ink);
+  --tw-prose-headings: var(--heading-color);
   --tw-prose-lead: var(--muted);
   --tw-prose-links: var(--accent);
   --tw-prose-bold: var(--ink);

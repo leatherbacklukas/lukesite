@@ -1,0 +1,261 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Mock, { type Tone } from './_Mock.astro';
+
+// Dev-only side-by-side comparison of heading colors and band patterns. Never built for production.
+export const getStaticPaths = (() =>
+  import.meta.env.DEV ? [{ params: { compare: 'compare' } }] : []) satisfies GetStaticPaths;
+
+const INK = 'var(--ink)';
+const RED = '#ff1f00';
+const RED_DEEP = '#e62600';
+const CERULEAN = 'var(--cerulean)';
+
+type Tones = [Tone, Tone, Tone, Tone];
+const CERULEAN_PEACH: Tones = ['cerulean', 'peach', 'cerulean', 'peach'];
+const CERULEAN_TEAL: Tones = ['cerulean', 'teal', 'cerulean', 'teal'];
+const PEACH_TEAL: Tones = ['peach', 'teal', 'peach', 'teal'];
+const THREE: Tones = ['cerulean', 'peach', 'teal', 'cerulean'];
+const THREE_DEEP: Tones = ['cerulean-deep', 'peach', 'teal-deep', 'cerulean-deep'];
+
+interface Option {
+  code: string;
+  label: string;
+  h1: string;
+  h2: string;
+  tones: Tones;
+  note?: string;
+}
+
+const groups: { title: string; intro: string; options: Option[] }[] = [
+  {
+    title: 'W · Warm pairings with deeper peach',
+    intro:
+      'Deeper peach is now the standard peach everywhere on this page. Cerulean headings throughout; each option alternates peach with another warm color.',
+    options: [
+      {
+        code: 'W1',
+        label: 'Peach / light peach',
+        h1: CERULEAN,
+        h2: CERULEAN,
+        tones: ['peach', 'peach-light', 'peach', 'peach-light'],
+        note: 'Subtle, one color family. The light peach is close to the page background.',
+      },
+      {
+        code: 'W2',
+        label: 'Peach / coral',
+        h1: CERULEAN,
+        h2: CERULEAN,
+        tones: ['peach', 'coral', 'peach', 'coral'],
+        note: 'Pale red-orange; echoes your link and accent color.',
+      },
+      {
+        code: 'W3',
+        label: 'Peach / apricot',
+        h1: CERULEAN,
+        h2: CERULEAN,
+        tones: ['peach', 'apricot', 'peach', 'apricot'],
+        note: 'Yellow-orange; warm and golden.',
+      },
+      {
+        code: 'W4',
+        label: 'Peach / butter yellow',
+        h1: CERULEAN,
+        h2: CERULEAN,
+        tones: ['peach', 'butter', 'peach', 'butter'],
+        note: 'The clearest contrast between the two bands.',
+      },
+      {
+        code: 'W5',
+        label: 'Peach / caramel',
+        h1: CERULEAN,
+        h2: CERULEAN,
+        tones: ['peach', 'caramel', 'peach', 'caramel'],
+        note: 'Brown family; the most grounded and earthy.',
+      },
+      {
+        code: 'W6',
+        label: 'Peach / butter / coral',
+        h1: CERULEAN,
+        h2: CERULEAN,
+        tones: ['peach', 'butter', 'coral', 'peach'],
+        note: 'Three-color warm cycle, brightest of these.',
+      },
+      {
+        code: 'W7',
+        label: 'Peach / apricot / caramel',
+        h1: CERULEAN,
+        h2: CERULEAN,
+        tones: ['peach', 'apricot', 'caramel', 'peach'],
+        note: 'Three-color warm cycle, more autumnal.',
+      },
+    ],
+  },
+  {
+    title: 'Alternatives to teal',
+    intro: 'Cerulean headings with peach alternating against a different second color.',
+    options: [
+      {
+        code: 'T1',
+        label: 'Peach / butter yellow',
+        h1: CERULEAN,
+        h2: CERULEAN,
+        tones: ['peach', 'butter', 'peach', 'butter'],
+        note: 'Classic editorial pairing with orange and blue. Warm overall.',
+      },
+      {
+        code: 'T2',
+        label: 'Peach / sage',
+        h1: CERULEAN,
+        h2: CERULEAN,
+        tones: ['peach', 'sage', 'peach', 'sage'],
+        note: 'Muted and earthy; the calmest of these.',
+      },
+      {
+        code: 'T3',
+        label: 'Peach / lavender',
+        h1: CERULEAN,
+        h2: CERULEAN,
+        tones: ['peach', 'lavender', 'peach', 'lavender'],
+        note: 'Soft neighbor to cerulean; a little more playful.',
+      },
+      {
+        code: 'T4',
+        label: 'Peach / blush',
+        h1: CERULEAN,
+        h2: CERULEAN,
+        tones: ['peach', 'blush', 'peach', 'blush'],
+        note: 'All warm bands, so cerulean does all the cool work.',
+      },
+      {
+        code: 'T5',
+        label: 'Peach / butter / sage',
+        h1: CERULEAN,
+        h2: CERULEAN,
+        tones: ['peach', 'butter', 'sage', 'peach'],
+        note: 'Three-color cycle, like B4 but warmer.',
+      },
+    ],
+  },
+  {
+    title: 'A · Heading color',
+    intro: 'Same bands in each (B4: cerulean / peach / teal), so only the headings change.',
+    options: [
+      { code: 'A1', label: 'Ink (dark)', h1: INK, h2: INK, tones: THREE },
+      {
+        code: 'A2',
+        label: 'Red-orange #FF1F00',
+        h1: RED,
+        h2: RED,
+        tones: THREE,
+        note: 'Your exact color. Fails contrast on the peach band (2.9:1; headings need 3:1).',
+      },
+      {
+        code: 'A3',
+        label: 'Deeper red-orange #E62600',
+        h1: RED_DEEP,
+        h2: RED_DEEP,
+        tones: THREE,
+        note: 'Passes on every background.',
+      },
+      { code: 'A4', label: 'Cerulean', h1: CERULEAN, h2: CERULEAN, tones: THREE },
+      {
+        code: 'A5',
+        label: 'Red-orange page title, ink section headings',
+        h1: RED_DEEP,
+        h2: INK,
+        tones: THREE,
+        note: 'One strong color moment per page.',
+      },
+    ],
+  },
+  {
+    title: 'B · Section bands',
+    intro: 'Every section is banded in all of these; only the colors change. Ink headings throughout.',
+    options: [
+      { code: 'B1', label: 'Cerulean / peach', h1: INK, h2: INK, tones: CERULEAN_PEACH },
+      {
+        code: 'B2',
+        label: 'Cerulean / teal',
+        h1: INK,
+        h2: INK,
+        tones: CERULEAN_TEAL,
+        note: 'Cool and calm; uses only colors already in your palette.',
+      },
+      {
+        code: 'B3',
+        label: 'Peach / teal',
+        h1: INK,
+        h2: INK,
+        tones: PEACH_TEAL,
+        note: 'No cerulean bands, so the cerulean header and footer stand out more.',
+      },
+      {
+        code: 'B4',
+        label: 'Cerulean / peach / teal',
+        h1: INK,
+        h2: INK,
+        tones: THREE,
+        note: 'The previous B5.',
+      },
+      {
+        code: 'B5',
+        label: 'Cerulean / peach / teal, deeper tints',
+        h1: INK,
+        h2: INK,
+        tones: THREE_DEEP,
+        note: 'Same as B4 with more saturated bands. All text still passes contrast.',
+      },
+    ],
+  },
+  {
+    title: 'C · Suggested pairings',
+    intro: 'A few combinations that work well together.',
+    options: [
+      { code: 'C1', label: 'A3 + B4', h1: RED_DEEP, h2: RED_DEEP, tones: THREE },
+      { code: 'C2', label: 'A5 + B2', h1: RED_DEEP, h2: INK, tones: CERULEAN_TEAL },
+      {
+        code: 'C3',
+        label: 'A3 + B2',
+        h1: RED_DEEP,
+        h2: RED_DEEP,
+        tones: CERULEAN_TEAL,
+        note: 'Warm headings against cool bands.',
+      },
+      {
+        code: 'C4',
+        label: 'A5 + B5',
+        h1: RED_DEEP,
+        h2: INK,
+        tones: THREE_DEEP,
+        note: 'The most colorful option that still keeps one heading accent.',
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout title="Compare">
+  <div class="max-w-measure">
+    <h1 class="text-display">Heading color and band options</h1>
+    <p class="mt-block text-muted">
+      Each preview is a miniature page with the real header, footer, and contact block. Tell me a
+      code from each group (for example "A3 + B4"), or a pairing from group C.
+    </p>
+  </div>
+
+  {
+    groups.map((group) => (
+      <section class="mt-section">
+        <h2 class="text-title">{group.title}</h2>
+        <p class="mt-2 text-muted">{group.intro}</p>
+        <div class="mt-block grid gap-x-8 gap-y-12 md:grid-cols-2">
+          {group.options.map((option) => (
+            <Mock {...option} />
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</BaseLayout>

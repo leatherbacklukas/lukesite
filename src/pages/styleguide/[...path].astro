@@ -2,48 +2,22 @@
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-// Dev-only page for tuning design treatments by eye. Never built for production.
+// Dev-only reference page for the design tokens and section patterns. Never built for production.
 export const getStaticPaths = (() =>
   import.meta.env.DEV ? [{ params: { path: undefined } }] : []) satisfies GetStaticPaths;
 
-const controls = [
-  {
-    name: 'headingColor',
-    legend: 'Heading color',
-    options: [
-      ['ink', 'Ink (dark)'],
-      ['red', 'Red-orange #FF1F00'],
-      ['red-deep', 'Red-orange, deeper #E62600'],
-      ['cerulean', 'Cerulean'],
-    ],
-  },
-  {
-    name: 'bands',
-    legend: 'Section bands',
-    options: [
-      ['none', 'None'],
-      ['cerulean', 'Cerulean only'],
-      ['two', 'Alternate cerulean / peach'],
-      ['three', 'Alternate cerulean / peach / teal'],
-      ['stacked', 'Every section, cycling colors'],
-    ],
-  },
-] as const;
-
-const defaults: Record<string, string> = { headingColor: 'ink', bands: 'two' };
-
 const swatches = [
-  ['canvas', 'Page background'],
+  ['canvas', 'Page background, intro section'],
   ['surface', 'Raised surface'],
   ['line', 'Borders, rules'],
   ['muted', 'Secondary text'],
   ['ink', 'Body text'],
   ['accent', 'Links, interaction (text-safe orange)'],
+  ['accent-on-band', 'Links inside peach bands'],
   ['accent-bright', 'Decoration only: rules, underlines, selection'],
-  ['cerulean', 'Header, footer, contact block'],
-  ['cerulean-wash', 'Pale cerulean band'],
-  ['sg-peach-wash', 'Pale peach band (candidate)'],
-  ['sg-teal-wash', 'Pale teal band (candidate)'],
+  ['cerulean', 'Headings, header, footer, contact block'],
+  ['peach', 'Section band'],
+  ['peach-light', 'Alternate section band'],
   ['teal', 'Tertiary accent, rare'],
 ];
 
@@ -86,105 +60,8 @@ const experience = [
 ---
 
 <BaseLayout title="Styleguide">
-  <style is:global>
-    :root {
-      --sg-peach-wash: #f6d9c6;
-      --sg-teal-wash: #d2e8e2;
-    }
-
-    html[data-heading-color='red'] {
-      --heading-color: #ff1f00;
-    }
-    html[data-heading-color='red-deep'] {
-      --heading-color: #e62600;
-    }
-    html[data-heading-color='cerulean'] {
-      --heading-color: var(--cerulean);
-    }
-
-    /* Which sections get a band, and which color, for each mode. */
-    html[data-bands='cerulean'] .sg-alt,
-    html:is([data-bands='two'], [data-bands='three']) .sg-alt[data-i='1'],
-    html[data-bands='two'] .sg-alt[data-i='3'],
-    html[data-bands='stacked'] .sg-all:is([data-j='1'], [data-j='4']) {
-      --band: var(--cerulean-wash);
-      --band-line: #bfd0e8;
-    }
-    html:is([data-bands='two'], [data-bands='three']) .sg-alt[data-i='2'],
-    html[data-bands='stacked'] .sg-all:is([data-j='2'], [data-j='5']) {
-      --band: var(--sg-peach-wash);
-      --band-line: #e9c1a8;
-    }
-    html[data-bands='three'] .sg-alt[data-i='3'],
-    html[data-bands='stacked'] .sg-all:is([data-j='3'], [data-j='6']) {
-      --band: var(--sg-teal-wash);
-      --band-line: #aed3c9;
-    }
-
-    html:not([data-bands='none'], [data-bands='stacked']) .sg-alt,
-    html[data-bands='stacked'] .sg-all {
-      /* Orange links need the deeper accent to keep 4.5:1 on peach and teal. */
-      --accent: #a33206;
-      --line: var(--band-line);
-      background: var(--band);
-      box-shadow: 0 0 0 100vmax var(--band);
-      clip-path: inset(0 -100vmax);
-      padding-block: calc(var(--section-gap) * 0.6);
-    }
-    html[data-bands='stacked'] .sg-stack {
-      gap: 0;
-    }
-    html[data-bands='stacked'] .sg-stack > section:first-child {
-      margin-bottom: var(--section-gap);
-    }
-    html[data-bands='stacked'] .sg-stack > .sg-cta {
-      margin-block: var(--section-gap);
-    }
-
-    .sg-cta {
-      background: var(--cerulean);
-      color: var(--on-cerulean);
-      padding: var(--block-gap) calc(var(--block-gap) * 1.25);
-    }
-    .sg-cta :is(h2, a, p) {
-      color: var(--on-cerulean);
-    }
-    .sg-cta a {
-      text-decoration-color: var(--accent-bright);
-    }
-    .sg-cta a:focus-visible {
-      outline-color: var(--on-cerulean);
-    }
-  </style>
-
-  <script is:inline define:vars={{ defaults }}>
-    const saved = { ...defaults, ...JSON.parse(localStorage.getItem('styleguide-v3') ?? '{}') };
-    Object.assign(document.documentElement.dataset, saved);
-  </script>
-
-  <form
-    id="styleguide-controls"
-    class="fixed right-4 bottom-4 z-10 flex max-w-[calc(100vw-2rem)] flex-wrap gap-x-8 gap-y-3 border border-line bg-surface p-4 text-sm text-ink shadow-lg"
-  >
-    {
-      controls.map((group) => (
-        <fieldset>
-          <legend class="mb-1 font-semibold">{group.legend}</legend>
-          <div class="flex flex-col gap-1">
-            {group.options.map(([value, label]) => (
-              <label class="flex items-center gap-1.5">
-                <input type="radio" name={group.name} value={value} class="accent-accent" />
-                {label}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-      ))
-    }
-  </form>
-
-  <div class="sg-stack flex flex-col gap-section pb-48">
-    <section class="max-w-measure">
+  <section class="page-container py-section">
+    <div class="max-w-measure">
       <h1 class="text-display">Engineering and creative technology, side by side.</h1>
       <p class="mt-block text-lg text-muted">
         I build pipelines and tools for real-time cinematics and virtual production, and I perform
@@ -192,9 +69,11 @@ const experience = [
           href="#">Read more about me</a
         >.
       </p>
-    </section>
+    </div>
+  </section>
 
-    <section aria-labelledby="sg-work" class="sg-all" data-j="1">
+  <section aria-labelledby="sg-work" class="band">
+    <div class="page-container">
       <h2 id="sg-work" class="text-title">Selected work</h2>
       <ul class="mt-block border-t border-line">
         {
@@ -214,9 +93,11 @@ const experience = [
           ))
         }
       </ul>
-    </section>
+    </div>
+  </section>
 
-    <section aria-labelledby="sg-areas" class="sg-alt sg-all" data-i="1" data-j="2">
+  <section aria-labelledby="sg-areas" class="band">
+    <div class="page-container">
       <h2 id="sg-areas" class="text-title">Areas</h2>
       <dl class="mt-block grid gap-x-10 gap-y-block sm:grid-cols-2 lg:grid-cols-3">
         {
@@ -235,9 +116,11 @@ const experience = [
           ))
         }
       </dl>
-    </section>
+    </div>
+  </section>
 
-    <section aria-labelledby="sg-exp" class="sg-all" data-j="3">
+  <section aria-labelledby="sg-exp" class="band">
+    <div class="page-container">
       <h2 id="sg-exp" class="text-title">Selected experience</h2>
       <ul class="mt-block max-w-measure border-t border-line">
         {
@@ -252,9 +135,11 @@ const experience = [
           ))
         }
       </ul>
-    </section>
+    </div>
+  </section>
 
-    <section aria-labelledby="sg-prose" class="sg-alt sg-all" data-i="2" data-j="4">
+  <section aria-labelledby="sg-prose" class="band">
+    <div class="page-container">
       <h2 id="sg-prose" class="text-title">Detail page body</h2>
       <div class="prose mt-block max-w-measure">
         <p>
@@ -277,9 +162,11 @@ const experience = [
         </div>
         <figcaption class="mt-2 text-sm text-muted">Caption text for a production still.</figcaption>
       </figure>
-    </section>
+    </div>
+  </section>
 
-    <section aria-labelledby="sg-type" class="sg-all" data-j="5">
+  <section aria-labelledby="sg-type" class="band">
+    <div class="page-container">
       <h2 id="sg-type" class="text-title">Type</h2>
       <div class="mt-block space-y-4">
         <p class="heading text-display">Display heading</p>
@@ -288,9 +175,11 @@ const experience = [
         <p>Body · Instrument Sans regular. The quick brown fox jumps over the lazy dog.</p>
         <p class="text-sm text-muted">Small / meta · Instrument Sans</p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section aria-labelledby="sg-color" class="sg-alt sg-all" data-i="3" data-j="6">
+  <section aria-labelledby="sg-color" class="band">
+    <div class="page-container">
       <h2 id="sg-color" class="text-title">Color tokens</h2>
       <ul class="mt-block grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {
@@ -312,10 +201,12 @@ const experience = [
         Text samples: <a href="#">accent link</a> · <span class="text-cerulean">cerulean text</span> ·
         <span class="text-teal">teal text</span> · <span class="text-muted">muted text</span>
       </p>
-      <p class="mt-2 text-sm text-muted">Press Tab to see focus outlines on links and controls.</p>
-    </section>
+      <p class="mt-2 text-sm text-muted">Press Tab to see focus outlines on links.</p>
+    </div>
+  </section>
 
-    <section aria-labelledby="sg-cta" class="sg-cta">
+  <div class="page-container py-section">
+    <section aria-labelledby="sg-cta" class="sg-cta bg-cerulean text-on-cerulean">
       <h2 id="sg-cta" class="text-title">Get in touch</h2>
       <p class="mt-3 max-w-measure">
         For collaborations, talks, or shows: <a href="#">hello@example.com</a>
@@ -323,24 +214,18 @@ const experience = [
     </section>
   </div>
 
-  <script>
-    const form = document.getElementById('styleguide-controls') as HTMLFormElement;
-    const root = document.documentElement;
-    const names = ['headingColor', 'bands'] as const;
-
-    for (const name of names) {
-      const input = form.querySelector<HTMLInputElement>(
-        `input[name="${name}"][value="${root.dataset[name]}"]`,
-      );
-      if (input) input.checked = true;
+  <style>
+    .sg-cta {
+      padding: var(--block-gap) calc(var(--block-gap) * 1.25);
     }
-
-    form.addEventListener('change', () => {
-      const data = new FormData(form);
-      const state: Record<string, string> = {};
-      for (const name of names) state[name] = String(data.get(name));
-      Object.assign(root.dataset, state);
-      localStorage.setItem('styleguide-v3', JSON.stringify(state));
-    });
-  </script>
+    .sg-cta :is(h2, a) {
+      color: var(--on-cerulean);
+    }
+    .sg-cta a {
+      text-decoration-color: var(--accent-bright);
+    }
+    .sg-cta a:focus-visible {
+      outline-color: var(--on-cerulean);
+    }
+  </style>
 </BaseLayout>

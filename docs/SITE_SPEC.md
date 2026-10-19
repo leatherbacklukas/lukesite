@@ -392,14 +392,11 @@ Do not turn these ideas into literal visual gimmicks.
 - **Density:** balanced.
 - **Color roles:** reddish orange is the one interactive accent (links, focus, current nav). Cerulean is secondary and may be used for larger surfaces; teal is rare. A brighter orange is for decoration only (rules, underlines), never text. All text colors must meet 4.5:1 contrast.
 - **Cerulean surfaces:** the site header and footer are solid cerulean bands. A closing contact section is a solid cerulean block.
-- **Cerulean backgrounds:** a pale cerulean background must be a true pale blue (`cerulean-wash`); mixing cerulean into the tan canvas produces a muddy gray. Text on solid cerulean uses the canvas color, and orange links do not have enough contrast on it.
-- **Layout:** editorial. A centered reading column (`max-w-measure`, about 40rem) inside a wider page (`max-w-wide`, 72rem); media may break out to the wide width.
+- **Text on cerulean:** text on solid cerulean uses the canvas color; orange links do not have enough contrast on it.
+- **Headings:** page and section headings (`h1`, `h2`) and headings inside long-form body text are cerulean. Item titles in lists (work rows, experience) stay ink.
+- **Section bands:** the page intro sits on the canvas. Every section after it is a full-width band (`.band`), and consecutive bands alternate deeper peach (`#F3CFB8`) and light peach (`#F8E3D5`) automatically. Inside bands, orange links use the deeper `accent-on-band` (`#A33206`) to keep 4.5:1. Avoid a bright red-orange such as `#FF1F00` on peach; it fails contrast.
+- **Layout:** editorial. Sections are full width; their content sits in `page-container` (`max-w-wide`, 72rem, with gutters). Reading text uses a narrower column (`max-w-measure`, about 40rem); media may use the full container width.
 - **Tokens:** colors and spacing are CSS variables in `src/styles/global.css`, exposed to Tailwind (`bg-canvas`, `text-muted`, `px-gutter`, `gap-section`, …). Tailwind's default color palette is disabled so only site colors are used.
-
-## Pending
-
-- Heading color: ink, saturated red-orange, or cerulean. Red-orange only works at heading sizes (3:1 large-text minimum); `#FF1F00` fails on the peach band, while `#E62600` passes on every background.
-- Section band pattern: alternating pale cerulean / peach (/ teal) bands. Inside bands, orange links use a deeper `#A33206` to keep 4.5:1.
 
 The website should not look like:
 

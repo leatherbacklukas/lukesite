@@ -22,10 +22,16 @@ const { Content } = await render(entry);
 
 <BaseLayout title={entry.data.title} description={entry.data.summary}>
   <article>
-    <h1 class="text-display">{entry.data.title}</h1>
-    <p class="mt-4 text-muted">{entry.data.summary}</p>
-    <div class="prose mt-10 max-w-none">
-      <Content />
+    <header class="page-container py-section">
+      <h1 class="text-display">{entry.data.title}</h1>
+      <p class="mt-4 text-muted">{entry.data.summary}</p>
+    </header>
+    <div class="band">
+      <div class="page-container">
+        <div class="prose max-w-measure">
+          <Content />
+        </div>
+      </div>
     </div>
   </article>
 </BaseLayout>
