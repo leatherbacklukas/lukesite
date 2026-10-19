@@ -2,8 +2,20 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { CATEGORIES, EXPERIENCE_KINDS, PORTFOLIO_TYPES } from './lib/taxonomy';
+import { youtubeId } from './lib/youtube';
 
 const categories = z.array(z.enum(CATEGORIES)).min(1);
+
+const youtubeVideo = z
+  .object({ url: z.url(), title: z.string() })
+  .transform((video, ctx) => {
+    const id = youtubeId(video.url);
+    if (!id) {
+      ctx.addIssue({ code: 'custom', message: `Not a YouTube video URL: ${video.url}` });
+      return z.NEVER;
+    }
+    return { ...video, id };
+  });
 
 const portfolio = defineCollection({
   loader: glob({
@@ -25,6 +37,7 @@ const portfolio = defineCollection({
       order: z.number().optional(),
       thumbnail: image().optional(),
       heroImage: image().optional(),
+      videos: z.array(youtubeVideo).optional(),
       technologies: z.array(z.string()).optional(),
       links: z.array(z.object({ label: z.string(), url: z.url() })).optional(),
       credits: z

@@ -71,6 +71,7 @@ There is no `slug` frontmatter field. Rename the folder to change the URL.
 
   thumbnail?: ImageMetadata   // relative path, e.g. ./thumbnail.jpg
   heroImage?: ImageMetadata
+  videos?: { url: string; title: string }[]   // YouTube URLs, shown as a grid
 
   technologies?: string[]
 
@@ -239,7 +240,7 @@ Do not create complicated scoring systems.
 
 # Detail Pages
 
-An entry gets a detail page at `/work/<id>` only if it has body content.
+An entry gets a detail page at `/work/<id>` only if it has body content or videos.
 
 An entry with frontmatter only still appears in listings (as a card or row) but does not link to an empty page.
 
@@ -269,6 +270,26 @@ Use one good image rather than forcing every item into a media-heavy template.
 Portfolio entries without appropriate imagery should still look intentional.
 
 The design must support text-led portfolio entries.
+
+---
+
+# Videos
+
+Videos are hosted on YouTube, never committed to the repository. List them in frontmatter:
+
+```yaml
+videos:
+  - url: https://www.youtube.com/watch?v=XXXXXXXXXXX
+    title: Launch cinematic
+  - url: https://youtu.be/YYYYYYYYYYY
+    title: Behind the scenes
+```
+
+Any common YouTube URL form works (watch, `youtu.be`, shorts, embed); the build fails on a URL it can't read.
+
+On the detail page the videos appear as a grid of thumbnails, in list order, above the body text. Clicking a thumbnail loads the player in place (from `youtube-nocookie.com`), so no YouTube player loads until someone asks for it. Without JavaScript the tile links to the video on YouTube.
+
+The body text then describes the work across the whole set, rather than captioning each video.
 
 ---
 

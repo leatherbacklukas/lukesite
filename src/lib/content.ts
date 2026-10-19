@@ -29,5 +29,5 @@ export async function getExperience(): Promise<ExperienceEntry[]> {
 }
 
 export function hasDetailPage(entry: PortfolioEntry): boolean {
-  return Boolean(entry.body?.trim());
+  return Boolean(entry.body?.trim() || entry.data.videos?.length);
 }

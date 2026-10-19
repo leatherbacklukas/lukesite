@@ -23,6 +23,17 @@ technologies:
   - Unreal Engine
   - Motion Capture
   - MetaHuman
+
+# Placeholder videos (Blender open movies). Any YouTube URL format works.
+videos:
+  - url: https://www.youtube.com/watch?v=aqz-KE-bpKQ
+    title: Big Buck Bunny
+  - url: https://youtu.be/eRsGyueVLvQ
+    title: Sintel
+  - url: https://www.youtube.com/watch?v=R6MlUcmOul8
+    title: Tears of Steel
+  - url: https://www.youtube.com/watch?v=WhWc3b3KhnY
+    title: Spring
 ---
 
 <!-- Sample entry from docs/CONTENT_MODEL.md. Replace with real content before launch. -->

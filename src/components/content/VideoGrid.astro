@@ -1,0 +1,87 @@
+---
+import { youtubeThumbnail } from '../../lib/youtube';
+
+interface Video {
+  id: string;
+  title: string;
+  url: string;
+}
+
+interface Props {
+  videos: Video[];
+}
+
+const { videos } = Astro.props;
+---
+
+<ul class="grid gap-x-6 gap-y-block sm:grid-cols-2 lg:grid-cols-3">
+  {
+    videos.map((video) => (
+      <li>
+        <div class="aspect-video bg-ink">
+          <a
+            href={video.url}
+            class="video-tile group relative block size-full"
+            data-video-id={video.id}
+            data-video-title={video.title}
+          >
+            <img
+              src={youtubeThumbnail(video.id)}
+              alt=""
+              width="480"
+              height="360"
+              loading="lazy"
+              decoding="async"
+              class="size-full object-cover"
+            />
+            <span class="play-badge" aria-hidden="true" />
+            <span class="sr-only">Play video: {video.title}</span>
+          </a>
+        </div>
+        <p class="mt-2 font-semibold">{video.title}</p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .play-badge {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    background-color: var(--cerulean);
+    transition: background-color 150ms;
+  }
+  .play-badge::after {
+    content: '';
+    position: absolute;
+    inset: 0.8rem 0.75rem 0.8rem 1rem;
+    background-color: var(--on-cerulean);
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+  }
+  .video-tile:is(:hover, :focus-visible) .play-badge {
+    background-color: var(--accent);
+  }
+</style>
+
+<script>
+  // Swap a thumbnail for the YouTube player only when clicked, so no player loads up front.
+  // Without JavaScript the tile is an ordinary link to the video on YouTube.
+  document.addEventListener('click', (event) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+    const tile = (event.target as Element).closest<HTMLAnchorElement>('a.video-tile');
+    if (!tile) return;
+    event.preventDefault();
+
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube-nocookie.com/embed/${tile.dataset.videoId}?autoplay=1`;
+    iframe.title = tile.dataset.videoTitle ?? 'YouTube video';
+    iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    iframe.allowFullscreen = true;
+    iframe.className = 'size-full';
+    tile.replaceWith(iframe);
+    iframe.focus();
+  });
+</script>
