@@ -37,6 +37,9 @@ const portfolio = defineCollection({
       order: z.number().optional(),
       thumbnail: image().optional(),
       heroImage: image().optional(),
+      images: z
+        .array(z.object({ src: image(), alt: z.string(), caption: z.string().optional() }))
+        .optional(),
       videos: z.array(youtubeVideo).optional(),
       technologies: z.array(z.string()).optional(),
       links: z.array(z.object({ label: z.string(), url: z.url() })).optional(),

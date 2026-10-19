@@ -71,6 +71,7 @@ There is no `slug` frontmatter field. Rename the folder to change the URL.
 
   thumbnail?: ImageMetadata   // relative path, e.g. ./thumbnail.jpg
   heroImage?: ImageMetadata
+  images?: { src: ImageMetadata; alt: string; caption?: string }[]   // key images beside the body
   videos?: { url: string; title: string }[]   // YouTube URLs, shown as a grid
 
   technologies?: string[]
@@ -240,7 +241,7 @@ Do not create complicated scoring systems.
 
 # Detail Pages
 
-An entry gets a detail page at `/work/<id>` only if it has body content or videos.
+An entry gets a detail page at `/work/<id>` only if it has body content, images, or videos.
 
 An entry with frontmatter only still appears in listings (as a card or row) but does not link to an empty page.
 
@@ -261,7 +262,17 @@ A portfolio item may have:
 
 - `thumbnail`
 - `heroImage`
+- `images`: key images shown in a column beside the body text on wide screens, and below it on small screens
 - inline images in the content body
+
+```yaml
+images:
+  - src: ./ray-tracing-controller.png
+    alt: "The Ray Tracing Controller panel in Unreal Engine"
+    caption: "Ray Tracing Controller"   # optional
+```
+
+`alt` is required: describe what the image shows for someone who can't see it.
 
 Not every entry needs all three.
 

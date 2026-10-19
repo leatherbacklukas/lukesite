@@ -1,5 +1,6 @@
 ---
 import type { GetStaticPaths } from 'astro';
+import { Image } from 'astro:assets';
 import { render } from 'astro:content';
 import VideoGrid from '../../components/content/VideoGrid.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -19,7 +20,9 @@ interface Props {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const { videos } = entry.data;
+const { images = [], videos } = entry.data;
+const hasBody = Boolean(entry.body?.trim());
+const hasImages = images.length > 0;
 ---
 
 <BaseLayout title={entry.data.title} description={entry.data.summary}>
@@ -29,12 +32,32 @@ const { videos } = entry.data;
       <p class="mt-4 text-muted">{entry.data.summary}</p>
     </header>
     {
-      entry.body?.trim() && (
+      (hasBody || hasImages) && (
         <div class="band">
-          <div class="page-container">
-            <div class="prose max-w-measure">
-              <Content />
-            </div>
+          <div class="page-container grid items-start gap-x-16 gap-y-block lg:grid-cols-[minmax(0,40rem)_minmax(0,1fr)]">
+            {hasBody && (
+              <div class="prose max-w-measure">
+                <Content />
+              </div>
+            )}
+            {hasImages && (
+              <div class:list={['flex flex-col gap-block', !hasBody && 'lg:col-span-2']}>
+                {images.map((img) => (
+                  <figure>
+                    <Image
+                      src={img.src}
+                      alt={img.alt}
+                      widths={[480, 960, 1440]}
+                      sizes="(min-width: 1024px) 28rem, 100vw"
+                      class="h-auto w-full"
+                    />
+                    {img.caption && (
+                      <figcaption class="mt-2 text-sm text-muted">{img.caption}</figcaption>
+                    )}
+                  </figure>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )
