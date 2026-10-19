@@ -126,8 +126,12 @@ videos:
     title: "Fortnite Chapter 4 Season 4 LAST RESORT Cinematic Trailer"
 ---
 
-<!-- TODO: describe what you did across these pieces as a whole. -->
-
 ## What I did
 
-Describe your role and contributions across these cinematics.
+My work on the Fortnite Cinematics team is that which I am most proud of. As a Cinematics Pipeline Developer and Engineer, I was primarily responsible for owning our Unreal Engine Sequencer rendering pipeline and all aspects that go into the final pixels of our cinematics. Through troubleshooting and delivering over 50 trailers, I was exposed to nearly all the disciplines of our Cinematics team and started to operate beyond my role and served as a technical artist, tool developer, and CGI generalist. I modeled and textured meshes to contribute to our environment art, authored and adapted visual effects to match the Fortnite style, corrected lighting setups, built our own materials and post-process effects for complex look development, and created crucial tools for our artists to use across the board to keep our cinematics optimized and stable.
+
+- Beyond Unreal Engine 4 and 5, primarily worked in Blender, Substance Painter, and Photoshop
+- Owned our cinematics Ray Tracing pipeline and created the Ray Tracing Controller, a foundational tool to control how our post process and ray tracing was used during trailer development to accommodate in-engine and final pixel rendering
+- Built our exporting and LUT post-processing pipeline, building our own Unreal Engine executor and post-export scripts to control final quality and encoding process
+- Built the interactive grass patch BP, allowing our animators to place a simple tool which leveraged our grass shader to simulate character collision and interaction by bending the grass as they passed and slowly unbent to simulate natural foliage interaction
+- Built the SkyDomeController, allowing art-directable control of the Fortnite Time Of Day system and the ambient ray-traced global illumination affecting our characters
