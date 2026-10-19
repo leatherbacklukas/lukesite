@@ -29,15 +29,6 @@ const { videos } = entry.data;
       <p class="mt-4 text-muted">{entry.data.summary}</p>
     </header>
     {
-      videos && videos.length > 0 && (
-        <section aria-label="Videos" class="band">
-          <div class="page-container">
-            <VideoGrid videos={videos} />
-          </div>
-        </section>
-      )
-    }
-    {
       entry.body?.trim() && (
         <div class="band">
           <div class="page-container">
@@ -46,6 +37,15 @@ const { videos } = entry.data;
             </div>
           </div>
         </div>
+      )
+    }
+    {
+      videos && videos.length > 0 && (
+        <section aria-label="Videos" class="band">
+          <div class="page-container">
+            <VideoGrid videos={videos} />
+          </div>
+        </section>
       )
     }
   </article>

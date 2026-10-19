@@ -287,7 +287,7 @@ videos:
 
 Any common YouTube URL form works (watch, `youtu.be`, shorts, embed); the build fails on a URL it can't read.
 
-On the detail page the videos appear as a grid of thumbnails, in list order, above the body text. Clicking a thumbnail loads the player in place (from `youtube-nocookie.com`), so no YouTube player loads until someone asks for it. Without JavaScript the tile links to the video on YouTube.
+On the detail page the body text comes first, then the videos as a grid of thumbnails in list order. Clicking a thumbnail loads the player in place (from `youtube-nocookie.com`), so no YouTube player loads until someone asks for it. Without JavaScript the tile links to the video on YouTube.
 
 The body text then describes the work across the whole set, rather than captioning each video.
 
