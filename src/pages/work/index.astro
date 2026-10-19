@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPortfolio, hasDetailPage } from '../../lib/content';
+
+const entries = await getPortfolio();
+---
+
+<BaseLayout title="Work">
+  <h1 class="text-display">Work</h1>
+  <p class="mt-4 text-muted">Work index placeholder. Unstyled list to prove the collection loads.</p>
+  <ul class="mt-8 space-y-4">
+    {
+      entries.map((entry) => (
+        <li>
+          {hasDetailPage(entry) ? (
+            <a href={`/work/${entry.id}`} class="underline">
+              {entry.data.title}
+            </a>
+          ) : (
+            <span>{entry.data.title}</span>
+          )}
+          <p class="text-sm text-muted">{entry.data.summary}</p>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

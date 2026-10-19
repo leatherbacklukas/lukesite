@@ -1,0 +1,45 @@
+---
+interface Props {
+  siteName: string;
+}
+
+const { siteName } = Astro.props;
+
+const navItems = [
+  { href: '/work', label: 'Work' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`);
+---
+
+<header class="bg-cerulean text-on-cerulean">
+  <div
+    class="mx-auto flex max-w-wide flex-wrap items-baseline justify-between gap-x-8 gap-y-2 px-gutter py-5"
+  >
+    <a
+      href="/"
+      class="heading text-xl text-on-cerulean no-underline focus-visible:outline-on-cerulean"
+      aria-current={path === '/' ? 'page' : undefined}>{siteName}</a
+    >
+    <nav aria-label="Primary">
+      <ul class="flex gap-6">
+        {
+          navItems.map(({ href, label }) => (
+            <li>
+              <a
+                href={href}
+                aria-current={isCurrent(href) ? 'page' : undefined}
+                class="text-on-cerulean no-underline decoration-2 underline-offset-[0.35em] hover:underline focus-visible:outline-on-cerulean aria-[current=page]:underline aria-[current=page]:decoration-accent-bright"
+              >
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>

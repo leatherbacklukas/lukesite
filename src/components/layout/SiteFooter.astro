@@ -1,0 +1,13 @@
+---
+interface Props {
+  siteName: string;
+}
+
+const { siteName } = Astro.props;
+---
+
+<footer class="bg-cerulean text-on-cerulean">
+  <div class="mx-auto max-w-wide px-gutter py-8 text-sm">
+    © {new Date().getFullYear()} {siteName}
+  </div>
+</footer>
